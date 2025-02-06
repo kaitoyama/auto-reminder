@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"time"
 
+	"github.com/rs/zerolog/log"
+
 	"github.com/kaitoyama/kaitoyama-server-template/internal/db"
 	"github.com/kaitoyama/kaitoyama-server-template/internal/domain"
 )
@@ -22,6 +24,12 @@ func NewTodoCreator(dbConnection *sql.DB) domain.TodoCreater {
 }
 
 func (d *todoCreator) Create(ctx context.Context, channelID string, content string, dueAt time.Time, ownerID string) (domain.Todo, error) {
+	tx, err := d.db.BeginTx(ctx, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to begin transaction")
+		return domain.Todo{}, err
+	}
+	defer tx.Rollback()
 	// check owner exists
 	user, err := d.q.GetUserByTraqId(ctx, ownerID)
 	if err != nil {
@@ -31,10 +39,12 @@ func (d *todoCreator) Create(ctx context.Context, channelID string, content stri
 				TraqID: ownerID,
 			})
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to get user by Traq ID")
 				return domain.Todo{}, err
 			}
 			i, err := userID.LastInsertId()
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to create user")
 				return domain.Todo{}, err
 			}
 			user = db.User{
@@ -42,6 +52,7 @@ func (d *todoCreator) Create(ctx context.Context, channelID string, content stri
 				TraqID: ownerID,
 			}
 		} else {
+			log.Error().Err(err).Msg("Failed to get last insert ID")
 			return domain.Todo{}, err
 		}
 	}
@@ -53,16 +64,25 @@ func (d *todoCreator) Create(ctx context.Context, channelID string, content stri
 		OwnerID:   user.ID,
 	})
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to create todo")
 		return domain.Todo{}, err
 	}
 
 	id64, err := id.LastInsertId()
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get last insert ID")
 		return domain.Todo{}, err
 	}
 
 	todo, err := d.q.GetTodo(ctx, id64)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get todo")
+		return domain.Todo{}, err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to commit transaction")
 		return domain.Todo{}, err
 	}
 
@@ -80,6 +100,7 @@ func (d *todoCreator) AddUser(ctx context.Context, todoID int, traQID string) (d
 	// with transaction
 	tx, err := d.db.BeginTx(ctx, nil)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get user by Traq ID")
 		return domain.Todo{}, err
 	}
 	defer tx.Rollback()
@@ -92,10 +113,12 @@ func (d *todoCreator) AddUser(ctx context.Context, todoID int, traQID string) (d
 				TraqID: traQID,
 			})
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to create user")
 				return domain.Todo{}, err
 			}
 			id, err := userID.LastInsertId()
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to get last insert ID")
 				return domain.Todo{}, err
 			}
 			user = db.User{
@@ -103,6 +126,7 @@ func (d *todoCreator) AddUser(ctx context.Context, todoID int, traQID string) (d
 				TraqID: traQID,
 			}
 		} else {
+			log.Error().Err(err).Msg("Failed to create user-todo relation")
 			return domain.Todo{}, err
 		}
 	}
@@ -113,27 +137,32 @@ func (d *todoCreator) AddUser(ctx context.Context, todoID int, traQID string) (d
 		TodoID: int64(todoID),
 	})
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to commit transaction")
 		return domain.Todo{}, err
 	}
 
 	// commit
 	err = tx.Commit()
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get todo")
 		return domain.Todo{}, err
 	}
 
 	todo, err := d.q.GetTodo(ctx, int64(todoID))
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get users by todo ID")
 		return domain.Todo{}, err
 	}
 
 	users, err := d.q.GetUsersByTodoId(ctx, todo.ID)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get user")
 		return domain.Todo{}, err
 	}
 
 	owner, err := d.q.GetUser(ctx, todo.OwnerID)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get user by Traq ID")
 		return domain.Todo{}, err
 	}
 
@@ -150,6 +179,7 @@ func (d *todoCreator) AddUser(ctx context.Context, todoID int, traQID string) (d
 func (d *todoCreator) DeleteUser(ctx context.Context, todoID int, userID string) (domain.Todo, error) {
 	user, err := d.q.GetUserByTraqId(ctx, userID)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get users by todo ID")
 		return domain.Todo{}, err
 	}
 
@@ -159,6 +189,7 @@ func (d *todoCreator) DeleteUser(ctx context.Context, todoID int, userID string)
 		return domain.Todo{}, err
 	}
 	if len(users) == 1 {
+		log.Error().Err(domain.ErrLastUser).Msg("Last user in todo")
 		return domain.Todo{}, domain.ErrLastUser
 	}
 
@@ -167,16 +198,19 @@ func (d *todoCreator) DeleteUser(ctx context.Context, todoID int, userID string)
 		TodoID: int64(todoID),
 	})
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to delete user-todo relation")
 		return domain.Todo{}, err
 	}
 
 	todo, err := d.q.GetTodo(ctx, int64(todoID))
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get todo")
 		return domain.Todo{}, err
 	}
 
 	users, err = d.q.GetUsersByTodoId(ctx, todo.ID)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get users by todo ID")
 		return domain.Todo{}, err
 	}
 
@@ -195,16 +229,19 @@ func (d *todoCreator) UpdateDueAt(ctx context.Context, todoID int, dueAt time.Ti
 		DueAt: dueAt,
 	})
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to update todo")
 		return domain.Todo{}, err
 	}
 
 	todo, err := d.q.GetTodo(ctx, int64(todoID))
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get todo")
 		return domain.Todo{}, err
 	}
 
 	users, err := d.q.GetUsersByTodoId(ctx, todo.ID)
 	if err != nil {
+		log.Error().Err(err).Msg("Failed to get users by todo ID")
 		return domain.Todo{}, err
 	}
 
@@ -219,5 +256,6 @@ func (d *todoCreator) UpdateDueAt(ctx context.Context, todoID int, dueAt time.Ti
 
 func (d *todoCreator) Delete(ctx context.Context, todoID int) error {
 	_, err := d.q.DeleteTodo(ctx, int64(todoID))
+	log.Error().Err(err).Msg("Failed to delete todo")
 	return err
 }
