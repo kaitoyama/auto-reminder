@@ -67,7 +67,7 @@ func main() {
 	reminder := db.NewTodoReminder(database)
 
 	// Initialize usecase
-	createUsecase := usecase.NewCreateUsecase(creator)
+	createUsecase := usecase.NewCreateUsecase(creator, bot)
 	reminderUsecase := usecase.NewReminderUsecase(bot, reminder)
 
 	// Initialize handler

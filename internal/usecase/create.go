@@ -15,9 +15,10 @@ type CreateUsecase struct {
 	creator   domain.TodoCreater
 }
 
-func NewCreateUsecase(creator domain.TodoCreater) *CreateUsecase {
+func NewCreateUsecase(creator domain.TodoCreater, bot *traqwsbot.Bot) *CreateUsecase {
 	return &CreateUsecase{
-		creator: creator,
+		creator:   creator,
+		traQWSBot: bot,
 	}
 }
 
