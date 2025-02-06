@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"os"
-	"time"
 
 	"github.com/go-co-op/gocron/v2"
 	_ "github.com/go-sql-driver/mysql"
@@ -78,8 +77,11 @@ func main() {
 	go func() {
 		s, _ := gocron.NewScheduler()
 		_, _ = s.NewJob(
-			gocron.DurationJob(
-				3*time.Minute,
+			gocron.DailyJob(
+				0,
+				gocron.NewAtTimes(
+					gocron.NewAtTime(17, 0, 0),
+				),
 			),
 			gocron.NewTask(
 				func() {
