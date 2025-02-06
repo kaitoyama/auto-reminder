@@ -4,7 +4,26 @@
 
 package db
 
+import (
+	"database/sql"
+	"time"
+)
+
+type Todo struct {
+	ID        int64        `json:"id"`
+	ChannelID string       `json:"channel_id"`
+	Content   string       `json:"content"`
+	CreatedAt sql.NullTime `json:"created_at"`
+	DueAt     time.Time    `json:"due_at"`
+	OwnerID   int64        `json:"owner_id"`
+}
+
 type User struct {
-	ID       int32  `json:"id"`
-	Username string `json:"username"`
+	ID     int64  `json:"id"`
+	TraqID string `json:"traq_id"`
+}
+
+type UserTodoRelation struct {
+	UserID int64 `json:"user_id"`
+	TodoID int64 `json:"todo_id"`
 }

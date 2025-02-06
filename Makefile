@@ -53,14 +53,3 @@ fmt:
 # Run linter
 lint:
 	golangci-lint run
-
-.PROXY: oapi
-oapi: generate-server generate-models ## Generate the code from the openapi.yaml file
-
-.PHONY: generate-server
-generate-server: ## Generate the server code
-	cd tools && go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --config=server.cfg.yml ../openapi/swagger.yml
-
-.PHONY: generate-models
-generate-models: ## Generate the models code
-	cd tools && go run github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen --config=models.cfg.yml ../openapi/swagger.yml

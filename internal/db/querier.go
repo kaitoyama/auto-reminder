@@ -10,11 +10,19 @@ import (
 )
 
 type Querier interface {
-	CreateUser(ctx context.Context, username string) (sql.Result, error)
-	DeleteUser(ctx context.Context, id int32) error
-	GetUser(ctx context.Context, id int32) (User, error)
-	ListUsers(ctx context.Context) ([]User, error)
-	UpdateUser(ctx context.Context, arg UpdateUserParams) error
+	CreateTodo(ctx context.Context, arg CreateTodoParams) (sql.Result, error)
+	CreateUser(ctx context.Context, arg CreateUserParams) (sql.Result, error)
+	CreateUserTodoRelation(ctx context.Context, arg CreateUserTodoRelationParams) (sql.Result, error)
+	DeleteTodo(ctx context.Context, id int64) (sql.Result, error)
+	DeleteUserTodoRelation(ctx context.Context, arg DeleteUserTodoRelationParams) (sql.Result, error)
+	GetTodo(ctx context.Context, id int64) (Todo, error)
+	GetTodoInDay(ctx context.Context) ([]Todo, error)
+	GetTodoInThreeDays(ctx context.Context) ([]Todo, error)
+	GetTodoInWeek(ctx context.Context) ([]Todo, error)
+	GetUser(ctx context.Context, id int64) (User, error)
+	GetUserByTraqId(ctx context.Context, traqID string) (User, error)
+	GetUsersByTodoId(ctx context.Context, todoID int64) ([]string, error)
+	UpdateTodo(ctx context.Context, arg UpdateTodoParams) (sql.Result, error)
 }
 
 var _ Querier = (*Queries)(nil)
