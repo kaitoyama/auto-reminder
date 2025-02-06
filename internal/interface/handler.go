@@ -8,6 +8,7 @@ import (
 
 	"github.com/kaitoyama/kaitoyama-server-template/internal/infrastructure/config"
 	"github.com/kaitoyama/kaitoyama-server-template/internal/usecase"
+	"github.com/rs/zerolog/log"
 	"github.com/traPtitech/go-traq"
 	traqwsbot "github.com/traPtitech/traq-ws-bot"
 	"github.com/traPtitech/traq-ws-bot/payload"
@@ -25,6 +26,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 	config := config.LoadConfig()
 
 	if !strings.HasPrefix(p.Message.Text, "@"+config.BotName) {
+		log.Info().Msg("Message received")
 		return nil
 	}
 
@@ -37,6 +39,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 			},
 		).Execute()
 		if err != nil {
+			log.Error().Err(err).Msg("Failed to post message")
 			return err
 		}
 	}
@@ -75,6 +78,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -89,6 +93,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -103,6 +108,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -123,6 +129,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to post message")
 				return err
 			}
 			return nil
@@ -136,8 +143,10 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if msgErr != nil {
+				log.Error().Err(msgErr).Msg("Failed to post message")
 				return msgErr
 			}
+			log.Error().Err(err).Msg("Failed to create todo")
 			return err
 		}
 
@@ -171,6 +180,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -183,6 +193,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -202,6 +213,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to post message")
 				return err
 			}
 			return nil
@@ -215,8 +227,10 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if msgErr != nil {
+				log.Error().Err(msgErr).Msg("Failed to post message")
 				return msgErr
 			}
+			log.Error().Err(err).Msg("Failed to add user")
 			return err
 		}
 
@@ -240,6 +254,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -258,6 +273,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -270,6 +286,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -289,6 +306,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to post message")
 				return err
 			}
 			return nil
@@ -304,8 +322,10 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if msgErr != nil {
+				log.Error().Err(msgErr).Msg("Failed to post message")
 				return msgErr
 			}
+			log.Error().Err(err).Msg("Failed to delete user")
 			return err
 		}
 
@@ -334,6 +354,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -348,6 +369,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -362,6 +384,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -374,6 +397,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -393,6 +417,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to post message")
 				return err
 			}
 			return nil
@@ -406,8 +431,10 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if msgErr != nil {
+				log.Error().Err(msgErr).Msg("Failed to post message")
 				return msgErr
 			}
+			log.Error().Err(err).Msg("Failed to update due date")
 			return err
 		}
 
@@ -431,6 +458,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -443,6 +471,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 						},
 					).Execute()
 					if err != nil {
+						log.Error().Err(err).Msg("Failed to post message")
 						return err
 					}
 					return nil
@@ -462,6 +491,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to post message")
 				return err
 			}
 			return nil
@@ -475,8 +505,10 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				},
 			).Execute()
 			if msgErr != nil {
+				log.Error().Err(msgErr).Msg("Failed to post message")
 				return msgErr
 			}
+			log.Error().Err(err).Msg("Failed to delete todo")
 			return err
 		}
 
@@ -487,6 +519,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 			},
 		).Execute()
 		if err != nil {
+			log.Error().Err(err).Msg("Failed to post message")
 			return err
 		}
 	}
