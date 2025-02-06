@@ -34,6 +34,7 @@ func (d *todoCreator) Create(ctx context.Context, channelID string, content stri
 	user, err := d.q.GetUserByTraqId(ctx, ownerID)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			log.Warn().Msg("Owner not found")
 			// create owner
 			userID, err := d.q.CreateUser(ctx, db.CreateUserParams{
 				TraqID: ownerID,
