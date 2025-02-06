@@ -138,7 +138,7 @@ func (u *CreateUsecase) Delete(ctx context.Context, todoID int) error {
 	_, err := u.creator.Get(ctx, todoID)
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to get todo")
-		if err == sql.ErrNoRows {
+		if err.Error() == sql.ErrNoRows.Error() {
 			_, _, err = u.traQWSBot.API().MessageApi.PostMessage(ctx, "todo").PostMessageRequest(
 				traq.PostMessageRequest{
 					Content: fmt.Sprintf(` リマインドが見つかりませんでした!  id: %d`, todoID),
