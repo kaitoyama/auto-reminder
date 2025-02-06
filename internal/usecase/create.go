@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/kaitoyama/kaitoyama-server-template/internal/domain"
+	"github.com/rs/zerolog/log"
 	"github.com/traPtitech/go-traq"
 	traqwsbot "github.com/traPtitech/traq-ws-bot"
 )
@@ -136,6 +137,7 @@ func (u *CreateUsecase) Delete(ctx context.Context, todoID int) error {
 	// Get the todo info before deleting it
 	_, err := u.creator.Get(ctx, todoID)
 	if err != nil {
+		log.Warn().Err(err).Msg("Failed to get todo")
 		if err == sql.ErrNoRows {
 			_, _, err = u.traQWSBot.API().MessageApi.PostMessage(ctx, "todo").PostMessageRequest(
 				traq.PostMessageRequest{
@@ -143,6 +145,7 @@ func (u *CreateUsecase) Delete(ctx context.Context, todoID int) error {
 				},
 			).Execute()
 			if err != nil {
+				log.Error().Err(err).Msg("Failed to post message")
 				return err
 			}
 			return nil
