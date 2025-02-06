@@ -271,6 +271,43 @@ func (d *todoCreator) Delete(ctx context.Context, todoID int) error {
 	}
 
 	_, err = d.q.DeleteTodo(ctx, int64(todoID))
-	log.Error().Err(err).Msg("Failed to delete todo")
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to delete todo")
+		return err
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to commit transaction")
+	}
 	return err
+}
+
+func (d *todoCreator) Get(ctx context.Context, todoID int) (domain.Todo, error) {
+	todo, err := d.q.GetTodo(ctx, int64(todoID))
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get todo")
+		return domain.Todo{}, err
+	}
+
+	users, err := d.q.GetUsersByTodoId(ctx, todo.ID)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get users by todo ID")
+		return domain.Todo{}, err
+	}
+
+	owner, err := d.q.GetUser(ctx, todo.OwnerID)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get user by Traq ID")
+		return domain.Todo{}, err
+	}
+
+	return domain.Todo{
+		ID:        int(todo.ID),
+		ChannelID: todo.ChannelID,
+		Content:   todo.Content,
+		DueAt:     todo.DueAt,
+		Users:     users,
+		OwnerID:   owner.TraqID,
+	}, nil
 }

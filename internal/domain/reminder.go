@@ -22,6 +22,7 @@ type TodoCreater interface {
 	DeleteUser(ctx context.Context, todoID int, userID string) (Todo, error)
 	UpdateDueAt(ctx context.Context, todoID int, dueAt time.Time) (Todo, error)
 	Delete(ctx context.Context, todoID int) error
+	Get(ctx context.Context, todoID int) (Todo, error)
 }
 
 type TodoReminder interface {
