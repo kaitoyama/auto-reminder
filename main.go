@@ -12,7 +12,7 @@ import (
 
 	"github.com/kaitoyama/kaitoyama-server-template/internal/infrastructure/config"
 	"github.com/kaitoyama/kaitoyama-server-template/internal/infrastructure/db"
-	handler "github.com/kaitoyama/kaitoyama-server-template/internal/interface"
+	"github.com/kaitoyama/kaitoyama-server-template/internal/interface/handler"
 	"github.com/kaitoyama/kaitoyama-server-template/internal/usecase"
 	traqwsbot "github.com/traPtitech/traq-ws-bot"
 	"github.com/traPtitech/traq-ws-bot/payload"
