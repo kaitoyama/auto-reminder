@@ -2,6 +2,7 @@ package usecase
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -135,7 +136,7 @@ func (u *CreateUsecase) Delete(ctx context.Context, todoID int) error {
 	// Get the todo info before deleting it
 	_, err := u.creator.Get(ctx, todoID)
 	if err != nil {
-		if err == domain.ErrNotFound {
+		if err == sql.ErrNoRows {
 			_, _, err = u.traQWSBot.API().MessageApi.PostMessage(ctx, "todo").PostMessageRequest(
 				traq.PostMessageRequest{
 					Content: fmt.Sprintf(` リマインドが見つかりませんでした!  id: %d`, todoID),
