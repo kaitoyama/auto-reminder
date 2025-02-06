@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/kaitoyama/kaitoyama-server-template/internal/infrastructure/config"
 	"github.com/kaitoyama/kaitoyama-server-template/internal/usecase"
 	"github.com/traPtitech/go-traq"
 	traqwsbot "github.com/traPtitech/traq-ws-bot"
@@ -19,7 +20,11 @@ type Handler struct {
 }
 
 func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
-	if !strings.HasPrefix(p.Message.Text, "@botname") {
+
+	// configからbotの名前を取得
+	config := config.LoadConfig()
+
+	if !strings.HasPrefix(p.Message.Text, "@"+config.BotName) {
 		return nil
 	}
 
