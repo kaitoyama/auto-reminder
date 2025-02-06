@@ -159,7 +159,7 @@ func (u *CreateUsecase) Delete(ctx context.Context, todoID int, channelID string
 		return err
 	}
 
-	_, _, err = u.traQWSBot.API().MessageApi.PostMessage(ctx, "todo").PostMessageRequest(
+	_, _, err = u.traQWSBot.API().MessageApi.PostMessage(ctx, channelID).PostMessageRequest(
 		traq.PostMessageRequest{
 			Content: fmt.Sprintf(` リマインドを削除しました!  id: %d`, todoID),
 		},
