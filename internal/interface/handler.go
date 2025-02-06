@@ -25,13 +25,13 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 	// configからbotの名前を取得
 	config := config.LoadConfig()
 
-	if !strings.HasPrefix(p.Message.Text, "@"+config.BotName) {
+	if !strings.HasPrefix(p.Message.PlainText, "@"+config.BotName) {
 		log.Info().Msg("Message received")
 		return nil
 	}
 
 	// spaceで区切る
-	args := strings.Fields(p.Message.Text)
+	args := strings.Fields(p.Message.PlainText)
 	if len(args) < 2 {
 		_, _, err := h.bot.API().MessageApi.PostMessage(context.Background(), p.Message.ChannelID).PostMessageRequest(
 			traq.PostMessageRequest{
