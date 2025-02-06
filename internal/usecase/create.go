@@ -133,13 +133,13 @@ func (u *CreateUsecase) UpdateDueAt(ctx context.Context, todoID int, dueAt time.
 	return nil
 }
 
-func (u *CreateUsecase) Delete(ctx context.Context, todoID int) error {
+func (u *CreateUsecase) Delete(ctx context.Context, todoID int, channelID string) error {
 	// Get the todo info before deleting it
 	_, err := u.creator.Get(ctx, todoID)
 	if err != nil {
 		log.Warn().Err(err).Msg("Failed to get todo")
 		if err.Error() == sql.ErrNoRows.Error() {
-			_, _, err = u.traQWSBot.API().MessageApi.PostMessage(ctx, "todo").PostMessageRequest(
+			_, _, err = u.traQWSBot.API().MessageApi.PostMessage(ctx, channelID).PostMessageRequest(
 				traq.PostMessageRequest{
 					Content: fmt.Sprintf(` リマインドが見つかりませんでした!  id: %d`, todoID),
 				},

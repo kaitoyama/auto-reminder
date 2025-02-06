@@ -498,7 +498,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 		}
 
 		// Process the delete command using the create usecase.
-		if err := h.create.Delete(context.Background(), id); err != nil {
+		if err := h.create.Delete(context.Background(), id, p.Message.ChannelID); err != nil {
 			_, _, msgErr := h.bot.API().MessageApi.PostMessage(context.Background(), p.Message.ChannelID).PostMessageRequest(
 				traq.PostMessageRequest{
 					Content: "処理中にエラーが発生しました",
