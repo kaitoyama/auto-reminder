@@ -256,7 +256,21 @@ func (d *todoCreator) UpdateDueAt(ctx context.Context, todoID int, dueAt time.Ti
 }
 
 func (d *todoCreator) Delete(ctx context.Context, todoID int) error {
-	_, err := d.q.DeleteTodo(ctx, int64(todoID))
+	// with transaction
+	tx, err := d.db.BeginTx(ctx, nil)
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to begin transaction")
+		return err
+	}
+	defer tx.Rollback()
+
+	_, err = d.q.DeleteUserTodoRelationByTodoID(ctx, int64(todoID))
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to delete user-todo relation")
+		return err
+	}
+
+	_, err = d.q.DeleteTodo(ctx, int64(todoID))
 	log.Error().Err(err).Msg("Failed to delete todo")
 	return err
 }

@@ -41,6 +41,10 @@ VALUES (?, ?);
 DELETE FROM user_todo_relation
 WHERE user_id = ? AND todo_id = ?;
 
+-- name: DeleteUserTodoRelationByTodoID :execresult
+DELETE FROM user_todo_relation
+WHERE todo_id = ?;
+
 -- name: GetUsersByTodoId :many
 SELECT u.traq_id
 FROM user u

@@ -83,6 +83,15 @@ func (q *Queries) DeleteUserTodoRelation(ctx context.Context, arg DeleteUserTodo
 	return q.db.ExecContext(ctx, DeleteUserTodoRelation, arg.UserID, arg.TodoID)
 }
 
+const DeleteUserTodoRelationByTodoID = `-- name: DeleteUserTodoRelationByTodoID :execresult
+DELETE FROM user_todo_relation
+WHERE todo_id = ?
+`
+
+func (q *Queries) DeleteUserTodoRelationByTodoID(ctx context.Context, todoID int64) (sql.Result, error) {
+	return q.db.ExecContext(ctx, DeleteUserTodoRelationByTodoID, todoID)
+}
+
 const GetTodo = `-- name: GetTodo :one
 SELECT t.id, t.channel_id, t.content, t.created_at, t.due_at, t.owner_id
 FROM todo t
