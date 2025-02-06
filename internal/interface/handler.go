@@ -66,7 +66,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 			case "-u":
 				i++
 				for i < len(args) && !strings.HasPrefix(args[i], "-") {
-					users = append(users, args[i])
+					users = append(users, strings.Split(args[i], "@")[1])
 					i++
 				}
 			case "-d":
@@ -168,7 +168,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 			case "-u":
 				i++
 				for i < len(args) && !strings.HasPrefix(args[i], "-") {
-					users = append(users, args[i])
+					users = append(users, strings.Split(args[i], "@")[1])
 					i++
 				}
 			case "-i":
@@ -261,7 +261,7 @@ func (h *Handler) MessageHandler(p *payload.MessageCreated) error {
 				}
 				// collect user tokens
 				for i < len(args) && !strings.HasPrefix(args[i], "-") {
-					users = append(users, args[i])
+					users = append(users, strings.Split(args[i], "@")[1])
 					i++
 				}
 			case "-i":
