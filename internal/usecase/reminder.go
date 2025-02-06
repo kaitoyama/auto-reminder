@@ -36,6 +36,7 @@ func (u *ReminderUsecase) NotifyTodoInWeek() error {
 		}
 		_, _, err = u.traqWSBot.API().MessageApi.PostMessage(ctx, todo.ChannelID).PostMessageRequest(
 			traq.PostMessageRequest{
+				Embed: traq.PtrBool(true),
 				Content: fmt.Sprintf(` ### 一週間前のリマインドです!
 %s cc: @%s
 %s
@@ -66,6 +67,7 @@ func (u *ReminderUsecase) NotifyTodoInThreeDays() error {
 		}
 		_, _, err = u.traqWSBot.API().MessageApi.PostMessage(ctx, todo.ChannelID).PostMessageRequest(
 			traq.PostMessageRequest{
+				Embed: traq.PtrBool(true),
 				Content: fmt.Sprintf(` ### 三日前のリマインドです!
 %s cc: @%s
 %s
@@ -96,6 +98,7 @@ func (u *ReminderUsecase) NotifyTodoInDay() error {
 		}
 		_, _, err = u.traqWSBot.API().MessageApi.PostMessage(ctx, todo.ChannelID).PostMessageRequest(
 			traq.PostMessageRequest{
+				Embed: traq.PtrBool(true),
 				Content: fmt.Sprintf(` ### 本日のリマインドです!
 %s cc: @%s
 %s
