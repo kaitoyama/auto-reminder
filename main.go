@@ -76,7 +76,7 @@ func main() {
 	// scheduling goroutine
 	go func() {
 		s, _ := gocron.NewScheduler()
-		_, _ = s.NewJob(
+		_, err = s.NewJob(
 			gocron.DailyJob(
 				1,
 				gocron.NewAtTimes(
@@ -104,6 +104,9 @@ func main() {
 				},
 			),
 		)
+		if err != nil {
+			log.Fatal().Err(err).Msg("Failed to schedule job")
+		}
 
 		s.Start()
 	}()
