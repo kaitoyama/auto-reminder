@@ -18,20 +18,20 @@ WHERE id = ?;
 -- name: GetTodoInWeek :many
 SELECT t.id, t.channel_id, t.content, t.created_at, t.due_at, t.owner_id
 FROM todo t
-WHERE t.due_at >= NOW() + INTERVAL 6 DAY
-    AND t.due_at < NOW() + INTERVAL 7 DAY;
+WHERE t.due_at >= CURDATE() + INTERVAL 6 DAY
+    AND t.due_at < CURDATE() + INTERVAL 7 DAY;
 
 -- name: GetTodoInThreeDays :many
 SELECT t.id, t.channel_id, t.content, t.created_at, t.due_at, t.owner_id
 FROM todo t
-WHERE t.due_at >= NOW() + INTERVAL 2 DAY
-    AND t.due_at < NOW() + INTERVAL 3 DAY;
+WHERE t.due_at >= CURDATE() + INTERVAL 2 DAY
+    AND t.due_at < CURDATE() + INTERVAL 3 DAY;
 
 -- name: GetTodoInDay :many
 SELECT t.id, t.channel_id, t.content, t.created_at, t.due_at, t.owner_id
 FROM todo t
-WHERE t.due_at >= NOW()
-    AND t.due_at < NOW() + INTERVAL 1 DAY;
+WHERE t.due_at >= CURDATE()
+    AND t.due_at < CURDATE() + INTERVAL 1 DAY;
 
 -- name: CreateUserTodoRelation :execresult
 INSERT INTO user_todo_relation (user_id, todo_id)

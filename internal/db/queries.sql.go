@@ -115,8 +115,8 @@ func (q *Queries) GetTodo(ctx context.Context, id int64) (Todo, error) {
 const GetTodoInDay = `-- name: GetTodoInDay :many
 SELECT t.id, t.channel_id, t.content, t.created_at, t.due_at, t.owner_id
 FROM todo t
-WHERE t.due_at >= NOW()
-    AND t.due_at < NOW() + INTERVAL 1 DAY
+WHERE t.due_at >= CURDATE()
+    AND t.due_at < CURDATE() + INTERVAL 1 DAY
 `
 
 func (q *Queries) GetTodoInDay(ctx context.Context) ([]Todo, error) {
@@ -152,8 +152,8 @@ func (q *Queries) GetTodoInDay(ctx context.Context) ([]Todo, error) {
 const GetTodoInThreeDays = `-- name: GetTodoInThreeDays :many
 SELECT t.id, t.channel_id, t.content, t.created_at, t.due_at, t.owner_id
 FROM todo t
-WHERE t.due_at >= NOW() + INTERVAL 2 DAY
-    AND t.due_at < NOW() + INTERVAL 3 DAY
+WHERE t.due_at >= CURDATE() + INTERVAL 2 DAY
+    AND t.due_at < CURDATE() + INTERVAL 3 DAY
 `
 
 func (q *Queries) GetTodoInThreeDays(ctx context.Context) ([]Todo, error) {
@@ -189,8 +189,8 @@ func (q *Queries) GetTodoInThreeDays(ctx context.Context) ([]Todo, error) {
 const GetTodoInWeek = `-- name: GetTodoInWeek :many
 SELECT t.id, t.channel_id, t.content, t.created_at, t.due_at, t.owner_id
 FROM todo t
-WHERE t.due_at >= NOW() + INTERVAL 6 DAY
-    AND t.due_at < NOW() + INTERVAL 7 DAY
+WHERE t.due_at >= CURDATE() + INTERVAL 6 DAY
+    AND t.due_at < CURDATE() + INTERVAL 7 DAY
 `
 
 func (q *Queries) GetTodoInWeek(ctx context.Context) ([]Todo, error) {

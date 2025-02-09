@@ -78,7 +78,7 @@ func main() {
 		s, _ := gocron.NewScheduler()
 		_, _ = s.NewJob(
 			gocron.DailyJob(
-				0,
+				1,
 				gocron.NewAtTimes(
 					gocron.NewAtTime(17, 0, 0),
 				),
