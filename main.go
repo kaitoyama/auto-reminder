@@ -85,6 +85,7 @@ func main() {
 			),
 			gocron.NewTask(
 				func() {
+					log.Info().Msg("Start to notify todo")
 					err := reminderUsecase.NotifyTodoInWeek()
 					if err != nil {
 						log.Error().Err(err).Msg("Failed to notify todo in week")
@@ -99,6 +100,7 @@ func main() {
 					if err != nil {
 						log.Error().Err(err).Msg("Failed to notify todo in one day")
 					}
+					log.Info().Msg("Finish to notify todo")
 				},
 			),
 		)
