@@ -80,7 +80,7 @@ func main() {
 			gocron.DailyJob(
 				1,
 				gocron.NewAtTimes(
-					gocron.NewAtTime(17, 0, 0),
+					gocron.NewAtTime(1, 0, 0),
 				),
 			),
 			gocron.NewTask(
