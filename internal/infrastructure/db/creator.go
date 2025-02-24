@@ -225,16 +225,25 @@ func (d *todoCreator) DeleteUser(ctx context.Context, todoID int, userID string)
 }
 
 func (d *todoCreator) UpdateDueAt(ctx context.Context, todoID int, dueAt time.Time) (domain.Todo, error) {
-	_, err := d.q.UpdateTodo(ctx, db.UpdateTodoParams{
-		ID:    int64(todoID),
-		DueAt: dueAt,
+	todo, err := d.q.GetTodo(ctx, int64(todoID))
+	if err != nil {
+		log.Error().Err(err).Msg("Failed to get todo")
+		return domain.Todo{}, err
+	}
+
+	_, err = d.q.UpdateTodo(ctx, db.UpdateTodoParams{
+		ID:        int64(todoID),
+		ChannelID: todo.ChannelID,
+		Content:   todo.Content,
+		DueAt:     dueAt,
+		OwnerID:   todo.OwnerID,
 	})
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to update todo")
 		return domain.Todo{}, err
 	}
 
-	todo, err := d.q.GetTodo(ctx, int64(todoID))
+	todo, err = d.q.GetTodo(ctx, int64(todoID))
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to get todo")
 		return domain.Todo{}, err
