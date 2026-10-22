@@ -32,7 +32,7 @@ require (
 	github.com/go-openapi/jsonpointer v0.22.5 // indirect
 	github.com/mattn/go-colorable v0.1.14 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
-	github.com/oapi-codegen/oapi-codegen/v2 v2.7.0
+	github.com/oapi-codegen/oapi-codegen/v2 v2.7.1
 	github.com/oasdiff/yaml v0.1.1 // indirect
 	github.com/oasdiff/yaml3 v0.0.14 // indirect
 	github.com/traPtitech/traq-ws-bot v1.2.1
